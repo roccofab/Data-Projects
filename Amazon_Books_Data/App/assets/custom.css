@@ -1,0 +1,65 @@
+/* Stili personalizzati per la dashboard */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.dash-graph {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: white;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* Stili per i dropdown */
+.Select-control {
+    border-radius: 6px;
+    border: 2px solid #e9ecef;
+}
+
+.Select-control:hover {
+    border-color: #007bff;
+}
+
+/* Stili per i titoli */
+h1, h2 {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Stili per i contenitori dei grafici */
+.graph-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Stili per i controlli */
+.control-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .graph-container {
+        padding: 10px;
+        margin: 10px 0;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+} 

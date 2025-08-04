@@ -1,0 +1,135 @@
+Metric,Value,Category
+Total orders,5288.00,General KPI
+Avg. monthly sales,1764698.08,General KPI
+Avg. daily sales,588232.69,General KPI
+Orders successfully delivered,28816.00,General KPI
+Orders returned,1050.00,General KPI
+Cancelled orders,844.00,General KPI
+Number of clients,28437.00,General KPI
+Avg. order per client,685.83,General KPI
+Total Revenue,7519933.00,Amazon KPI
+Total number of orders,3076.00,Amazon KPI
+Average order value,682.64,Amazon KPI
+Delivered orders,10178.00,Amazon KPI
+Returned orders,383.00,Amazon KPI
+Cancelled orders,308.00,Amazon KPI
+Orders delivered rate,91.90%,Amazon KPI
+Orders returned rate,3.46%,Amazon KPI
+Women orders,7617.00,Amazon KPI
+Women orders percentage,68.78%,Amazon KPI
+Men orders,3458.00,Amazon KPI
+Men orders percentage,31.22%,Amazon KPI
+Teenagers orders,0.00,Amazon KPI
+Teenagers orders percentage,0.00%,Amazon KPI
+Adults orders,5507.00,Amazon KPI
+Adults orders percentage,49.72%,Amazon KPI
+Senior orders,2168.00,Amazon KPI
+Senior orders percentage,19.58%,Amazon KPI
+Total Revenue,4941540.00,Myntra KPI
+Total number of orders,7254.00,Myntra KPI
+Average order value,681.22,Myntra KPI
+Delivered orders,6754.00,Myntra KPI
+Returned orders,238.00,Myntra KPI
+Cancelled orders,188.00,Myntra KPI
+Orders delivered rate,92.55%,Myntra KPI
+Orders returned rate,3.26%,Myntra KPI
+Women orders,5116.00,Myntra KPI
+Women orders percentage,70.10%,Myntra KPI
+Men orders,2182.00,Myntra KPI
+Men orders percentage,29.90%,Myntra KPI
+Teenagers orders,0.00,Myntra KPI
+Teenagers orders percentage,0.00%,Myntra KPI
+Adults orders,3671.00,Myntra KPI
+Adults orders percentage,50.30%,Myntra KPI
+Senior orders,1380.00,Myntra KPI
+Senior orders percentage,18.91%,Myntra KPI
+Total Revenue,1331427.00,Ajio KPI
+Total number of orders,1931.00,Ajio KPI
+Average order value,689.50,Ajio KPI
+Delivered orders,1808.00,Ajio KPI
+Returned orders,60.00,Ajio KPI
+Cancelled orders,54.00,Ajio KPI
+Orders delivered rate,92.91%,Ajio KPI
+Orders returned rate,3.08%,Ajio KPI
+Women orders,1359.00,Ajio KPI
+Women orders percentage,69.84%,Ajio KPI
+Men orders,587.00,Ajio KPI
+Men orders percentage,30.16%,Ajio KPI
+Teenagers orders,0.00,Ajio KPI
+Teenagers orders percentage,0.00%,Ajio KPI
+Adults orders,978.00,Ajio KPI
+Adults orders percentage,50.26%,Ajio KPI
+Senior orders,377.00,Ajio KPI
+Senior orders percentage,19.37%,Ajio KPI
+Total Revenue,4573301.00,Flipkart KPI
+Total number of orders,6703.00,Flipkart KPI
+Average order value,682.28,Flipkart KPI
+Delivered orders,6216.00,Flipkart KPI
+Returned orders,231.00,Flipkart KPI
+Cancelled orders,188.00,Flipkart KPI
+Orders delivered rate,92.09%,Flipkart KPI
+Orders returned rate,3.42%,Flipkart KPI
+Women orders,4694.00,Flipkart KPI
+Women orders percentage,69.54%,Flipkart KPI
+Men orders,2056.00,Flipkart KPI
+Men orders percentage,30.46%,Flipkart KPI
+Teenagers orders,0.00,Flipkart KPI
+Teenagers orders percentage,0.00%,Flipkart KPI
+Adults orders,3394.00,Flipkart KPI
+Adults orders percentage,50.28%,Flipkart KPI
+Senior orders,1364.00,Flipkart KPI
+Senior orders percentage,20.21%,Flipkart KPI
+Total Revenue,927606.00,Meesho KPI
+Total number of orders,1398.00,Meesho KPI
+Average order value,663.52,Meesho KPI
+Delivered orders,1295.00,Meesho KPI
+Returned orders,47.00,Meesho KPI
+Cancelled orders,38.00,Meesho KPI
+Orders delivered rate,92.17%,Meesho KPI
+Orders returned rate,3.35%,Meesho KPI
+Women orders,1008.00,Meesho KPI
+Women orders percentage,71.74%,Meesho KPI
+Men orders,397.00,Meesho KPI
+Men orders percentage,28.26%,Meesho KPI
+Teenagers orders,0.00,Meesho KPI
+Teenagers orders percentage,0.00%,Meesho KPI
+Adults orders,699.00,Meesho KPI
+Adults orders percentage,49.75%,Meesho KPI
+Senior orders,285.00,Meesho KPI
+Senior orders percentage,20.28%,Meesho KPI
+Total Revenue,867241.00,Others KPI
+Total number of orders,1261.00,Others KPI
+Average order value,687.74,Others KPI
+Delivered orders,1185.00,Others KPI
+Returned orders,38.00,Others KPI
+Cancelled orders,34.00,Others KPI
+Orders delivered rate,93.09%,Others KPI
+Orders returned rate,2.99%,Others KPI
+Women orders,874.00,Others KPI
+Women orders percentage,68.66%,Others KPI
+Men orders,399.00,Others KPI
+Men orders percentage,31.34%,Others KPI
+Teenagers orders,0.00,Others KPI
+Teenagers orders percentage,0.00%,Others KPI
+Adults orders,641.00,Others KPI
+Adults orders percentage,50.35%,Others KPI
+Senior orders,260.00,Others KPI
+Senior orders percentage,20.42%,Others KPI
+Total Revenue,1015329.00,Nalli KPI
+Total number of orders,1484.00,Nalli KPI
+Average order value,684.18,Nalli KPI
+Delivered orders,1380.00,Nalli KPI
+Returned orders,53.00,Nalli KPI
+Cancelled orders,34.00,Nalli KPI
+Orders delivered rate,92.62%,Nalli KPI
+Orders returned rate,3.56%,Nalli KPI
+Women orders,1034.00,Nalli KPI
+Women orders percentage,69.40%,Nalli KPI
+Men orders,456.00,Nalli KPI
+Men orders percentage,30.60%,Nalli KPI
+Teenagers orders,0.00,Nalli KPI
+Teenagers orders percentage,0.00%,Nalli KPI
+Adults orders,741.00,Nalli KPI
+Adults orders percentage,49.73%,Nalli KPI
+Senior orders,303.00,Nalli KPI
+Senior orders percentage,20.34%,Nalli KPI

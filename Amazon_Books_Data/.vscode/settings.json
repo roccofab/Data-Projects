@@ -1,0 +1,7 @@
+{
+    "python.analysis.extraPaths": [
+        "./src/Normalization",
+        "./src/Analysis"
+    ],
+    "vsintellicode.modify.editor.suggestSelection": "enabled"
+}
