@@ -3,3 +3,6 @@ pandas
 numpy
 matplotlib
 altair
+python-dotenv
+sqlalchemy
+pymysql
