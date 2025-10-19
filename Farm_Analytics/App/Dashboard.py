@@ -96,7 +96,7 @@ with tab1:
             )
             sl.altair_chart(chart3, use_container_width=True)
         else:
-            sl.info("Dati produzione non disponibili o senza colonna 'year'.")
+            sl.info("Production Data not Available'.")
             
     #column 4 chart
     with col4:
@@ -140,23 +140,25 @@ with tab2:
             if 'year' in df.columns:
                 df = df[df["year"] < current_year]
         
-        if not df.empty and all(col in df.columns for col in ['irrigation_expenses','fertilizer_costs','pesticide_costs','maintenance_expenses']):
+        if not df.empty and all(col in df.columns for col in ['irrigation_expenses','fertilizer_costs','pesticide_costs','maintenance_expenses']) and 'year' in df.columns:
             df['total_expenses'] = df[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis = 1)
             
-        chart1 = (
-            alt.Chart(df)
-            .mark_line(point = True)
-            .encode(
-                x = alt.X("year:O", title = "Year", axis = axis),
-                y = alt.Y("total_expenses:Q", title = "expenses(€)", axis = axis),
-                tooltip = [
-                    alt.Tooltip("year:O", title="Year"),
-                    alt.Tooltip("total_expenses:Q", title="Total_Expenses", format=".0f")
-                ]
+            chart1 = (
+                alt.Chart(df)
+                .mark_line(point = True)
+                .encode(
+                    x = alt.X("year:O", title = "Year", axis = axis),
+                    y = alt.Y("total_expenses:Q", title = "expenses(€)", axis = axis),
+                    tooltip = [
+                        alt.Tooltip("year:O", title="Year"),
+                        alt.Tooltip("total_expenses:Q", title="Total_Expenses", format=".0f")
+                    ]
+                )
+                .properties(width=400, height=350, title="Total expenses over the years(irrigation, fertilization,pesticides,soil and plant maintenance)")
             )
-            .properties(width=400, height=350, title="Total expenses over the years(irrigation, fertilization,pesticides,soil and plant maintenance)")
-        )
-        sl.altair_chart(chart1, use_container_width=True)
+            sl.altair_chart(chart1, use_container_width=True)
+        else:
+            sl.info("Dati spese non disponibili o senza colonne richieste.")
         
     # column 2 chart 
     with col2: 
@@ -165,96 +167,110 @@ with tab2:
         df = em.get_consumption_data()
         if 'year' not in df.columns and 'date' in df.columns:
             df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
-        chart2 = alt.Chart(df).mark_bar().encode(
-            x=alt.X("year:O", title = "year", axis = axis),
-            y = alt.Y("irrigation_required_m3:Q", title = "Volume(m^3)", axis = axis),
-            tooltip = ["year", "irrigation_required_m3","irrigation_expenses"]
-        )
         
-        line_chart = alt.Chart(df).mark_line(color='red').encode(
-            x='year:O',
-            y=alt.Y('irrigation_expenses', title='expenses (€)', axis=alt.Axis(titleColor='red')), 
-            tooltip=['year', 'irrigation_required_m3', 'irrigation_expenses']
-        )
+        if not df.empty and 'year' in df.columns and all(col in df.columns for col in ['irrigation_required_m3', 'irrigation_expenses']):
+            chart2 = alt.Chart(df).mark_bar().encode(
+                x=alt.X("year:O", title = "year", axis = axis),
+                y = alt.Y("irrigation_required_m3:Q", title = "Volume(m^3)", axis = axis),
+                tooltip = ["year", "irrigation_required_m3","irrigation_expenses"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color='red').encode(
+                x='year:O',
+                y=alt.Y('irrigation_expenses', title='expenses (€)', axis=alt.Axis(titleColor='red')), 
+                tooltip=['year', 'irrigation_required_m3', 'irrigation_expenses']
+            )
 
-        # merge chart2 and line_chart and synchronize the X-axis
-        combined_chart = alt.layer(chart2, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+            # merge chart2 and line_chart and synchronize the X-axis
+            combined_chart = alt.layer(chart2, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True)
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Dati di consumo non disponibili o senza colonne richieste.")
         
     #column 3 chart
     with col3:
         sl.header("Pesticides Amount(Kg)-Expenses(€)")
         
-        chart3 = alt.Chart(df).mark_bar().encode(
-            x = alt.X("year:O", title = "Year", axis = axis),
-            y = alt.Y("pesticide_required_kg:Q", title = "Amount (Kg)", axis = axis),
-            tooltip = ["year", "pesticide_required_kg", "pesticide_costs"]
-        )
-        
-        line_chart = alt.Chart(df).mark_line(color='red').encode(
-            x='year:O',
-            y=alt.Y('pesticide_costs', title='expenses (€)', axis=alt.Axis(titleColor='red')), 
-            tooltip=['year', 'pesticide_required_kg', 'pesticide_costs']
-        )
+        if not df.empty and 'year' in df.columns and all(col in df.columns for col in ['pesticide_required_kg', 'pesticide_costs']):
+            chart3 = alt.Chart(df).mark_bar().encode(
+                x = alt.X("year:O", title = "Year", axis = axis),
+                y = alt.Y("pesticide_required_kg:Q", title = "Amount (Kg)", axis = axis),
+                tooltip = ["year", "pesticide_required_kg", "pesticide_costs"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color='red').encode(
+                x='year:O',
+                y=alt.Y('pesticide_costs', title='expenses (€)', axis=alt.Axis(titleColor='red')), 
+                tooltip=['year', 'pesticide_required_kg', 'pesticide_costs']
+            )
 
-        # merge chart2 and line_chart and synchronize the X-axis
-        combined_chart = alt.layer(chart3, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+            # merge chart2 and line_chart and synchronize the X-axis
+            combined_chart = alt.layer(chart3, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True)
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Dati pesticidi non disponibili.")
         
     with col4:
         sl.header("Fertilizer Amount(Kg)-Expenses(€)")
         
-        chart4 = alt.Chart(df).mark_bar().encode(
-            x = alt.X("year:O", title = "year", axis = axis),
-            y = alt.Y("fertilizer_required_kg:Q", title = "Amount (Kg)", axis = axis),
-            tooltip = ["year", "fertilizer_required_kg", "fertilizer_costs"]
-        )
-        
-        line_chart = alt.Chart(df).mark_line(color = 'red').encode(
-            x = "year:O",
-            y = alt.Y("fertilizer_costs", title = "expenses (€)", axis = alt.Axis(titleColor='red')),
-            tooltip = ["year", "fertilizer_required_kg", "fertilizer_costs"]
-        )
-        
-        combined_chart = alt.layer(chart4, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+        if not df.empty and 'year' in df.columns and all(col in df.columns for col in ['fertilizer_required_kg', 'fertilizer_costs']):
+            chart4 = alt.Chart(df).mark_bar().encode(
+                x = alt.X("year:O", title = "year", axis = axis),
+                y = alt.Y("fertilizer_required_kg:Q", title = "Amount (Kg)", axis = axis),
+                tooltip = ["year", "fertilizer_required_kg", "fertilizer_costs"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color = 'red').encode(
+                x = "year:O",
+                y = alt.Y("fertilizer_costs", title = "expenses (€)", axis = alt.Axis(titleColor='red')),
+                tooltip = ["year", "fertilizer_required_kg", "fertilizer_costs"]
+            )
+            
+            combined_chart = alt.layer(chart4, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True) 
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Dati fertilizzanti non disponibili.") 
         
     with col5:
         sl.header("Annual Soil and Plant Maintenance Expenses")  
         
-        chart5 = (
-            alt.Chart(df)
-            .mark_line(point = True)
-            .encode(
-                x = alt.X("year:O", title = "Year", axis = axis),
-                y = alt.Y("maintenance_expenses:Q", title = "expenses(€)", axis = axis),
-                tooltip = [
-                    alt.Tooltip("year:O", title="Year"),
-                    alt.Tooltip("maintenance_expenses:Q", title="Total_Expenses", format=".0f")
-                ]
+        if not df.empty and 'year' in df.columns and 'maintenance_expenses' in df.columns:
+            chart5 = (
+                alt.Chart(df)
+                .mark_line(point = True)
+                .encode(
+                    x = alt.X("year:O", title = "Year", axis = axis),
+                    y = alt.Y("maintenance_expenses:Q", title = "expenses(€)", axis = axis),
+                    tooltip = [
+                        alt.Tooltip("year:O", title="Year"),
+                        alt.Tooltip("maintenance_expenses:Q", title="Total_Expenses", format=".0f")
+                    ]
+                )
+                .properties(width=400, height=350, title="Soil and Plants Expenses Over the Years")
             )
-            .properties(width=400, height=350, title="Soil and Plants Expenses Over the Years")
-        )
-        sl.altair_chart(chart5, use_container_width=True)
+            sl.altair_chart(chart5, use_container_width=True)
+        else:
+            sl.info("Dati manutenzione non disponibili.")
          
         
     with col6:
         sl.header("Percentage Distribution of Expenses")
         
-        years_list = sorted(df['year'].unique())  #list of unique years
-        selected_year = sl.selectbox("Select Year", years_list, index=len(years_list) - 1)  #selectbox for year selection, default to the latest year
-        df_selected = df[df["year"] == selected_year].copy()  # filter for the selected year
-        
-        df_selected['total_expenses'] = df_selected[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis=1)
+        if not df.empty and 'year' in df.columns and all(col in df.columns for col in ['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']):
+            years_list = sorted(df['year'].unique())  #list of unique years
+            selected_year = sl.selectbox("Select Year", years_list, index=len(years_list) - 1)  #selectbox for year selection, default to the latest year
+            df_selected = df[df["year"] == selected_year].copy()  # filter for the selected year
+            
+            df_selected['total_expenses'] = df_selected[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis=1)
         
         # Transform the 4 expense columns into a single Expense Type column and their values ​​into Amount (long format)
         df_melted = df_selected.melt(
@@ -290,9 +306,11 @@ with tab2:
         
         # Add percentage labels on the slices
         
-        # Combine pie chart and text
-        chart_pie = chart_pie 
-        sl.altair_chart(chart_pie, use_container_width=True)
+            # Combine pie chart and text
+            chart_pie = chart_pie 
+            sl.altair_chart(chart_pie, use_container_width=True)
+        else:
+            sl.info("Dati spese non disponibili per il grafico a torta.")
 
         
 with tab3:
