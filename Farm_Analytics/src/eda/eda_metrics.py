@@ -8,25 +8,24 @@ import mysql.connector
 from mysql.connector import errors as msc_error
 
 def get_consumption_data():
+    conn = None
     try:
         db = DBConnection()
         conn = db.get_mysql_connection()
         query = "SELECT * FROM consumption_data"
         df = pd.read_sql(query, conn)
         return df
-    except Exception as e:
-        print(f"Error retrieving consumption data: {e}")
-        return pd.DataFrame()
     except msc_error.InterfaceError as e:
         print(f"MySQL database connection error: {e}")
         return pd.DataFrame()
     except msc_error.ProgrammingError as e:
-        print(f"MySQL programming error while retrieving data from weather_data table: {e}")
+        print(f"MySQL programming error while retrieving data from consumption_data table: {e}")
         return pd.DataFrame()
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error retrieving consumption data: {e}")
         return pd.DataFrame()
     finally:
+        if conn:
             conn.close()
 
 def get_data():
