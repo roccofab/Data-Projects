@@ -70,12 +70,17 @@ with tab1:
             
     #column 3 chart
     with col3:
-        df = em.get_production_data().sort_values(by = 'year').copy()
-        df["new_plants"] = df["plants_counter"].diff().fillna(0)  # Calculate new plants per year by taking the difference between consecutive years
-        df["new_plants"] = df["new_plants"].apply(lambda x: x if x > 0 else 0)  # Set negative values to 0
-        
+        prod_df = em.get_production_data().copy()
+        # ensure 'year' exists
+        if 'year' not in prod_df.columns and 'date' in prod_df.columns:
+            prod_df['year'] = pd.to_datetime(prod_df['date'], errors='coerce').dt.year
+
         sl.header("New Plants per Year")
-        if not df.empty:
+        if 'year' in prod_df.columns and not prod_df.empty:
+            df = prod_df.sort_values(by='year').copy()
+            df["new_plants"] = df["plants_counter"].diff().fillna(0)
+            df["new_plants"] = df["new_plants"].apply(lambda x: x if x > 0 else 0)
+
             chart3 = (
                 alt.Chart(df)
                 .mark_bar()
@@ -90,6 +95,8 @@ with tab1:
                 .properties(width=400, height=350, title="New Plants per Year")
             )
             sl.altair_chart(chart3, use_container_width=True)
+        else:
+            sl.info("Dati produzione non disponibili o senza colonna 'year'.")
             
     #column 4 chart
     with col4:
@@ -123,13 +130,18 @@ with tab2:
         sl.header("Expenses Over the Years")
         
         df = em.get_consumption_data().copy()
+        # ensure 'year' exists
+        if 'year' not in df.columns and 'date' in df.columns:
+            df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
         current_year = dt.date.today().year
         current_month = dt.date.today().month
         # excludes the current year if the month of October has not yet been reached
         if current_month < 10:  
-            df = df[df["year"] < current_year]
+            if 'year' in df.columns:
+                df = df[df["year"] < current_year]
         
-        df['total_expenses'] = df[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis = 1)
+        if not df.empty and all(col in df.columns for col in ['irrigation_expenses','fertilizer_costs','pesticide_costs','maintenance_expenses']):
+            df['total_expenses'] = df[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis = 1)
             
         chart1 = (
             alt.Chart(df)
@@ -151,6 +163,8 @@ with tab2:
         sl.header("Irrigation Volume(m^3)-Expenses(€)")
         
         df = em.get_consumption_data()
+        if 'year' not in df.columns and 'date' in df.columns:
+            df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
         chart2 = alt.Chart(df).mark_bar().encode(
             x=alt.X("year:O", title = "year", axis = axis),
             y = alt.Y("irrigation_required_m3:Q", title = "Volume(m^3)", axis = axis),
@@ -329,11 +343,14 @@ with tab3:
         
     with col3:
         df = em.get_production_data()
+        if 'year' not in df.columns and 'date' in df.columns:
+            df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
         current_year = dt.date.today().year
         current_month = dt.date.today().month
         #excludes the current year if the month of October has not yet been reached
         if current_month < 10:   
-            df = df[df["year"] < current_year]
+            if 'year' in df.columns:
+                df = df[df["year"] < current_year]
             
         df['price_per_kg'] = df.apply(
             lambda x: x['oil_revenue']/x['oil_yield'] if x['oil_yield'] > 0 else 0, axis = 1
@@ -359,6 +376,10 @@ with tab3:
         try:
             prod = em.get_production_data()
             cons = em.get_consumption_data()
+            if 'year' not in prod.columns and 'date' in prod.columns:
+                prod['year'] = pd.to_datetime(prod['date'], errors='coerce').dt.year
+            if 'year' not in cons.columns and 'date' in cons.columns:
+                cons['year'] = pd.to_datetime(cons['date'], errors='coerce').dt.year
             df = pd.merge(prod,cons,on = 'year',how = 'inner')
             current_year = dt.date.today().year
             current_month = dt.date.today().month
