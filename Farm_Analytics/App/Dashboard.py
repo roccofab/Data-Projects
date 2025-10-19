@@ -158,7 +158,7 @@ with tab2:
             )
             sl.altair_chart(chart1, use_container_width=True)
         else:
-            sl.info("Dati spese non disponibili o senza colonne richieste.")
+            sl.info("Consumption Data not Available.")
         
     # column 2 chart 
     with col2: 
@@ -188,7 +188,7 @@ with tab2:
 
             sl.altair_chart(combined_chart, use_container_width=True)
         else:
-            sl.info("Dati di consumo non disponibili o senza colonne richieste.")
+            sl.info("Consumption Data not Available.")
         
     #column 3 chart
     with col3:
@@ -214,7 +214,7 @@ with tab2:
 
             sl.altair_chart(combined_chart, use_container_width=True)
         else:
-            sl.info("Dati pesticidi non disponibili.")
+            sl.info("Pesticide Data not Available.")
         
     with col4:
         sl.header("Fertilizer Amount(Kg)-Expenses(€)")
@@ -238,7 +238,7 @@ with tab2:
 
             sl.altair_chart(combined_chart, use_container_width=True)
         else:
-            sl.info("Dati fertilizzanti non disponibili.") 
+            sl.info("Fertilizer Data not Available.")
         
     with col5:
         sl.header("Annual Soil and Plant Maintenance Expenses")  
@@ -259,7 +259,7 @@ with tab2:
             )
             sl.altair_chart(chart5, use_container_width=True)
         else:
-            sl.info("Dati manutenzione non disponibili.")
+            sl.info("Maintenance Data not Available.")
          
         
     with col6:
@@ -304,13 +304,13 @@ with tab2:
             ).properties(width=400,height=450,title=f"Expense Distribution for {selected_year}")
         )
         
-        # Add percentage labels on the slices
-        
+            # Add percentage labels on the slices
+            
             # Combine pie chart and text
             chart_pie = chart_pie 
             sl.altair_chart(chart_pie, use_container_width=True)
         else:
-            sl.info("Dati spese non disponibili per il grafico a torta.")
+            sl.info("Expense Data not Available for Pie Chart.")
 
         
 with tab3:
