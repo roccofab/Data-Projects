@@ -150,7 +150,7 @@
         python -c "from src.data_acquisition.save_consumption_cost_data import generate_consumption_table; generate_consumption_table()"
         python src/data_acquisition/save_weather_data.py   # quando vuoi aggiungere il meteo
 
-    Alternatively, simply run the **Main.py** file
+    **Alternatively, simply run the Main.py file**
 
 - You can launch the Dashboard locally:
     - Open your prompt and go to the root folder.

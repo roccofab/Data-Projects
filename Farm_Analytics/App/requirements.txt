@@ -6,3 +6,5 @@ altair
 python-dotenv
 sqlalchemy
 pymysql
+plotly
+seaborn
