@@ -271,39 +271,39 @@ with tab2:
             df_selected = df[df["year"] == selected_year].copy()  # filter for the selected year
             
             df_selected['total_expenses'] = df_selected[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis=1)
-        
-        # Transform the 4 expense columns into a single Expense Type column and their values ​​into Amount (long format)
-        df_melted = df_selected.melt(
-            id_vars=["year"],
-            value_vars=[
-                "irrigation_expenses",
-                "fertilizer_costs",
-                "pesticide_costs",
-                "maintenance_expenses",
-            ],
-            var_name="Expense Type",
-            value_name="Amount (€)"
-        )
-        
-        # Calculate percentages
-        total = df_melted["Amount (€)"].sum()
-        df_melted["Percentage"] = (df_melted["Amount (€)"] / total) * 100
-        
-        # Create pie chart
-        chart_pie = (
-            alt.Chart(df_melted)
-            .mark_arc(outerRadius=150)
-            .encode(
-                theta=alt.Theta("Percentage:Q", stack=True),
-                color=alt.Color("Expense Type:N", legend=alt.Legend(title="Expense Type")),
-                tooltip=[
-                    alt.Tooltip("Expense Type:N", title="Type"),
-                    alt.Tooltip("Amount (€):Q", format=".2f"),
-                    alt.Tooltip("Percentage:Q", format=".2f", title="% of Total"),
+            
+            # Transform the 4 expense columns into a single Expense Type column and their values ​​into Amount (long format)
+            df_melted = df_selected.melt(
+                id_vars=["year"],
+                value_vars=[
+                    "irrigation_expenses",
+                    "fertilizer_costs",
+                    "pesticide_costs",
+                    "maintenance_expenses",
                 ],
-            ).properties(width=400,height=450,title=f"Expense Distribution for {selected_year}")
-        )
-        
+                var_name="Expense Type",
+                value_name="Amount (€)"
+            )
+            
+            # Calculate percentages
+            total = df_melted["Amount (€)"].sum()
+            df_melted["Percentage"] = (df_melted["Amount (€)"] / total) * 100
+            
+            # Create pie chart
+            chart_pie = (
+                alt.Chart(df_melted)
+                .mark_arc(outerRadius=150)
+                .encode(
+                    theta=alt.Theta("Percentage:Q", stack=True),
+                    color=alt.Color("Expense Type:N", legend=alt.Legend(title="Expense Type")),
+                    tooltip=[
+                        alt.Tooltip("Expense Type:N", title="Type"),
+                        alt.Tooltip("Amount (€):Q", format=".2f"),
+                        alt.Tooltip("Percentage:Q", format=".2f", title="% of Total"),
+                    ],
+                ).properties(width=400,height=450,title=f"Expense Distribution for {selected_year}")
+            )
+            
             # Add percentage labels on the slices
             
             # Combine pie chart and text
