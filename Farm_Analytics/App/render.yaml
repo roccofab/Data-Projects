@@ -5,8 +5,8 @@ services:
     region: oregon
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run App/Dashboard.py --server.port=$PORT --server.address=0.0.0.0
-    rootDir: .
+    startCommand: streamlit run Dashboard.py --server.port=$PORT --server.address=0.0.0.0
+    rootDir: Farm_Analytics/App
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.0
