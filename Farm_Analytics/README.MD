@@ -138,7 +138,7 @@
             DB_PORT=3306
             DB_USER=your_username
             DB_PASSWORD=your_password
-            DB_NAME=agri_sud
+            DB_NAME=agri_data
 
 - Install Dependencies: 
 
