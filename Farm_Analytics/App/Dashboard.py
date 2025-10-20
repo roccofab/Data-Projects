@@ -361,116 +361,141 @@ with tab3:
         
     with col3:
         df = em.get_production_data()
-        if 'year' not in df.columns and 'date' in df.columns:
-            df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
-        current_year = dt.date.today().year
-        current_month = dt.date.today().month
-        #excludes the current year if the month of October has not yet been reached
-        if current_month < 10:   
-            if 'year' in df.columns:
-                df = df[df["year"] < current_year]
-            
-        df['price_per_kg'] = df.apply(
-            lambda x: x['oil_revenue']/x['oil_yield'] if x['oil_yield'] > 0 else 0, axis = 1
-        )
+        if df.empty:
+            sl.info("Production Data not Available.")
+        else:
+            if 'year' not in df.columns and 'date' in df.columns:
+                df['year'] = pd.to_datetime(df['date'], errors='coerce').dt.year
+            current_year = dt.date.today().year
+            current_month = dt.date.today().month
+            #excludes the current year if the month of October has not yet been reached
+            if current_month < 10:   
+                if 'year' in df.columns:
+                    df = df[df["year"] < current_year]
+                
+            if not df.empty and 'oil_revenue' in df.columns and 'oil_yield' in df.columns:
+                df['price_per_kg'] = df.apply(
+                    lambda x: x['oil_revenue']/x['oil_yield'] if x['oil_yield'] > 0 else 0, axis = 1
+                )
+            else:
+                sl.info("Oil revenue or yield data not available.")
         
         sl.header("Oil Price per Kg Over the Years")
-        chart3 = (
-            alt.Chart(df)
-            .mark_line(point = True)
-            .encode(
-                x = alt.X("year:O", title = "Year", axis = axis),
-                y = alt.Y("price_per_kg:Q", title = "Price", axis = axis),
-                tooltip = [
-                    alt.Tooltip("year:O", title = "Year"),
-                    alt.Tooltip("price_per_kg:Q", title = "Price_per_Kg", format = ".2f")
-                ]
+        if not df.empty and 'price_per_kg' in df.columns:
+            chart3 = (
+                alt.Chart(df)
+                .mark_line(point = True)
+                .encode(
+                    x = alt.X("year:O", title = "Year", axis = axis),
+                    y = alt.Y("price_per_kg:Q", title = "Price", axis = axis),
+                    tooltip = [
+                        alt.Tooltip("year:O", title = "Year"),
+                        alt.Tooltip("price_per_kg:Q", title = "Price_per_Kg", format = ".2f")
+                    ]
+                )
+                .properties(width=400, height=350)
             )
-            .properties(width=400, height=350)
-        )
-        sl.altair_chart(chart3, use_container_width=True)
+            sl.altair_chart(chart3, use_container_width=True)
+        else:
+            sl.info("Oil price data not available.")
         
     with col4:
         try:
             prod = em.get_production_data()
             cons = em.get_consumption_data()
-            if 'year' not in prod.columns and 'date' in prod.columns:
-                prod['year'] = pd.to_datetime(prod['date'], errors='coerce').dt.year
-            if 'year' not in cons.columns and 'date' in cons.columns:
-                cons['year'] = pd.to_datetime(cons['date'], errors='coerce').dt.year
-            df = pd.merge(prod,cons,on = 'year',how = 'inner')
-            current_year = dt.date.today().year
-            current_month = dt.date.today().month
-            #excludes the current year if the month of October has not yet been reached
-            if current_month < 10:   
-                df = df[df["year"] < current_year]
-                
-            df['total_expenses'] = df[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis = 1)
-            df['profit'] = df['oil_revenue'] - df['total_expenses']
+            if prod.empty or cons.empty:
+                sl.info("Production or consumption data not available.")
+            else:
+                if 'year' not in prod.columns and 'date' in prod.columns:
+                    prod['year'] = pd.to_datetime(prod['date'], errors='coerce').dt.year
+                if 'year' not in cons.columns and 'date' in cons.columns:
+                    cons['year'] = pd.to_datetime(cons['date'], errors='coerce').dt.year
+                df = pd.merge(prod,cons,on = 'year',how = 'inner')
+                current_year = dt.date.today().year
+                current_month = dt.date.today().month
+                #excludes the current year if the month of October has not yet been reached
+                if current_month < 10:   
+                    df = df[df["year"] < current_year]
+                    
+                if not df.empty and all(col in df.columns for col in ['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses', 'oil_revenue']):
+                    df['total_expenses'] = df[['irrigation_expenses', 'fertilizer_costs', 'pesticide_costs', 'maintenance_expenses']].sum(axis = 1)
+                    df['profit'] = df['oil_revenue'] - df['total_expenses']
+                else:
+                    sl.info("Required data columns not available.")
         except Exception as e:
             print(f"Error getting revenue and expenses: {e}")
+            sl.info("Error loading data.")
             
-        sl.header("Profit(€)-Expenses(€) Over the Years")    
-        chart4 = alt.Chart(df).mark_bar().encode(
-            x=alt.X("year:O", title = "Year", axis = axis),
-            y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
-            tooltip = ["year", "total_expenses","profit"]
-        )
-        
-        line_chart = alt.Chart(df).mark_line(color='red').encode(
-            x='year:O',
-            y=alt.Y('total_expenses', title='Expenses (€)', axis=alt.Axis(titleColor='red')), 
-            tooltip=['year', 'total_expenses', 'profit']
-        )
+        sl.header("Profit(€)-Expenses(€) Over the Years")
+        if not df.empty and 'profit' in df.columns and 'total_expenses' in df.columns:
+            chart4 = alt.Chart(df).mark_bar().encode(
+                x=alt.X("year:O", title = "Year", axis = axis),
+                y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
+                tooltip = ["year", "total_expenses","profit"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color='red').encode(
+                x='year:O',
+                y=alt.Y('total_expenses', title='Expenses (€)', axis=alt.Axis(titleColor='red')), 
+                tooltip=['year', 'total_expenses', 'profit']
+            )
 
-        # merge chart4 and line_chart and synchronize the X-axis
-        combined_chart = alt.layer(chart4, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+            # merge chart4 and line_chart and synchronize the X-axis
+            combined_chart = alt.layer(chart4, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True)
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Profit and expenses data not available.")
         
     with col5:
         sl.header("Profit(€)-Surface Area(m^2)")
-        chart5 = alt.Chart(df).mark_bar().encode(
-        x = alt.X("year:O", title = "Year", axis = axis),
-        y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
-        tooltip = ["year", "profit", "surface_area_in_m2"]
-        )
-        
-        line_chart = alt.Chart(df).mark_line(color='red').encode(
-            x = "year:O",
-            y = alt.Y("surface_area_in_m2", title="Surface Area (m^2)", axis = alt.Axis(titleColor='red', title="Surface Area (m^2)")),
-            tooltip=['year', 'profit', 'surface_area_in_m2']
-        )
-        
-        # merge chart5 and line_chart and synchronize the X-axis
-        combined_chart = alt.layer(chart5, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+        if not df.empty and 'profit' in df.columns and 'surface_area_in_m2' in df.columns:
+            chart5 = alt.Chart(df).mark_bar().encode(
+            x = alt.X("year:O", title = "Year", axis = axis),
+            y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
+            tooltip = ["year", "profit", "surface_area_in_m2"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color='red').encode(
+                x = "year:O",
+                y = alt.Y("surface_area_in_m2", title="Surface Area (m^2)", axis = alt.Axis(titleColor='red', title="Surface Area (m^2)")),
+                tooltip=['year', 'profit', 'surface_area_in_m2']
+            )
+            
+            # merge chart5 and line_chart and synchronize the X-axis
+            combined_chart = alt.layer(chart5, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True)
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Profit and surface area data not available.")
         
     with col6:
         sl.header("Profit(€)-Number of Plants")
-        chart6 = alt.Chart(df).mark_bar().encode(
-            x = alt.X("year:O", title = "Year", axis = axis),
-            y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
-            tooltip = ["year", "profit", "plants_counter"]
-        )
-        
-        line_chart = alt.Chart(df).mark_line(color = 'red').encode(
-            x = "year:O",
-            y = alt.Y("plants_counter", title = "Number of Plants", axis = alt.Axis(titleColor='red', title = "Number of Plants")),
-            tooltip=["year","profit","plants_counter"]
-        )
-        
-        # merge chart6 and line_chart and synchronize the X-axis
-        combined_chart = alt.layer(chart6, line_chart).resolve_scale(
-            y='independent' # the y-axes have two different value scales
-        )
+        if not df.empty and 'profit' in df.columns and 'plants_counter' in df.columns:
+            chart6 = alt.Chart(df).mark_bar().encode(
+                x = alt.X("year:O", title = "Year", axis = axis),
+                y = alt.Y("profit:Q", title = "Profit (€)", axis = axis),
+                tooltip = ["year", "profit", "plants_counter"]
+            )
+            
+            line_chart = alt.Chart(df).mark_line(color = 'red').encode(
+                x = "year:O",
+                y = alt.Y("plants_counter", title = "Number of Plants", axis = alt.Axis(titleColor='red', title = "Number of Plants")),
+                tooltip=["year","profit","plants_counter"]
+            )
+            
+            # merge chart6 and line_chart and synchronize the X-axis
+            combined_chart = alt.layer(chart6, line_chart).resolve_scale(
+                y='independent' # the y-axes have two different value scales
+            )
 
-        sl.altair_chart(combined_chart, use_container_width=True)
+            sl.altair_chart(combined_chart, use_container_width=True)
+        else:
+            sl.info("Profit and plants data not available.")
         
         
         
