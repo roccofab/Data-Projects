@@ -9,7 +9,10 @@ import altair as alt
 from src.eda import eda_metrics as em, eda_plots as ep
 
     
-
+sl.sidebar.subheader("🔍 Debug Info")
+for var in ["DB_HOST", "DB_USER", "DB_NAME"]:
+    sl.sidebar.write(f"{var}: {os.getenv(var)}")
+    
 sl.set_page_config(page_title="Analytics Olive Oil and Olive Production Company", layout="wide")
 sl.title("Analytics Olive Oil and Olive Production Company Dashboard")
 
