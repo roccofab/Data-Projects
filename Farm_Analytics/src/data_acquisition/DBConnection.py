@@ -32,7 +32,17 @@ class DBConnection:
                 "password" : os.getenv("DB_PASSWORD", "your_password"),
                 "database" : os.getenv("DB_NAME", "your_database_name")
             }
-            cls.engine = None 
+            cls.engine = None
+            
+            print("---- DATABASE CONNECTION DEBUG ----")
+            print(f"Host: {cls._params['host']}")
+            print(f"Port: {cls._params['port']}")
+            print(f"User: {cls._params['user']}")
+            print(f"Database: {cls._params['database']}")
+            if cls._params['password'] in ("your_password", "", None):
+                print("⚠️  Warning: DB_PASSWORD not loaded correctly")
+            print("------------------------------------")
+            
         return cls._instance
     
     def get_engine(self):
@@ -58,6 +68,8 @@ class DBConnection:
                 self._engine = create_engine(
                     f"mysql+pymysql://{self._params['user']}:{self._params['password']}@{self._params['host']}:{self._params['port']}/{self._params['database']}"
                 )
+                #DEBUG
+                print("SQLAlchemy engine created successfully.")
             except exc.ArgumentError as e:
                 print(f"Connection string error: {e}")
             except exc.NoSuchModuleError:
@@ -70,4 +82,10 @@ class DBConnection:
         return self._engine
     
     def get_mysql_connection(self):
-        return mysql.connector.connect(**self._params)
+        try:
+            conn = mysql.connector.connect(**self._params)
+            print("MySQL direct connection successful.")  #DEBUG
+            return conn
+        except Exception as e:
+            print(f"MySQL connection error: {e}")  # DEBUG
+            return None
