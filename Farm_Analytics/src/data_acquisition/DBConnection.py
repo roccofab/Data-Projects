@@ -24,7 +24,7 @@ class DBConnection:
         """
         if cls._instance is None:
             cls._instance = super(DBConnection,cls).__new__(cls)
-            load_dotenv()
+            load_dotenv(override=False) # Load environment variables from .env file if not already set and avoid overwriting existing variables
             cls._params = {
                 "host" : os.getenv("DB_HOST", "localhost"),
                 "port" : int(os.getenv("DB_PORT", "3306")),
