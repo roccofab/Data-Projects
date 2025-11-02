@@ -9,9 +9,17 @@ import altair as alt
 from src.eda import eda_metrics as em, eda_plots as ep
 
     
-sl.sidebar.subheader("🔍 Debug Info")
-for var in ["DB_HOST", "DB_USER", "DB_NAME"]:
-    sl.sidebar.write(f"{var}: {os.getenv(var)}")
+sl.sidebar.subheader("Debug Info")
+db_host = os.getenv("DB_HOST", "localhost")
+db_user = os.getenv("DB_USER", "root")
+db_name = os.getenv("DB_NAME", "agri_data")
+
+for var, value in [("DB_HOST", db_host), ("DB_USER", db_user), ("DB_NAME", db_name)]:
+    sl.sidebar.write(f"{var}: {value}")
+
+# Warning if the environment variables are not configured correctly
+if db_host == "localhost" or db_user == "root" or db_name == "agri_data":
+    sl.sidebar.error("⚠️ Warning: Environment variables not configured correctly")
     
 sl.set_page_config(page_title="Analytics Olive Oil and Olive Production Company", layout="wide")
 sl.title("Analytics Olive Oil and Olive Production Company Dashboard")
