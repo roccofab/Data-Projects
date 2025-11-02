@@ -34,7 +34,6 @@ is_render = os.getenv("PORT") is not None
 
 if is_render:
     # On Render, check if we have all required vars with non-default values
-    # (except PORT which Render sets automatically)
     has_custom_config = (
         db_host != "localhost" and 
         db_user != "root" and 
