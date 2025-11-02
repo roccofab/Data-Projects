@@ -10,38 +10,54 @@ from src.eda import eda_metrics as em, eda_plots as ep
 
     
 sl.sidebar.subheader("Debug Info")
+
+# Try to load from .env first (for local development)
+from dotenv import load_dotenv
+load_dotenv(override=False)
+
+# Get environment variables (will use .env locally, Render env vars on Render)
 db_host = os.getenv("DB_HOST", "localhost")
 db_user = os.getenv("DB_USER", "root")
 db_name = os.getenv("DB_NAME", "agri_data")
 db_port = os.getenv("DB_PORT", "3306")
 db_password = os.getenv("DB_PASSWORD", "")
 
-# Check if variables are set (not None) vs using defaults
-env_vars_status = {
-    "DB_HOST": (db_host, db_host != "localhost" and db_host is not None),
-    "DB_USER": (db_user, db_user != "root" and db_user is not None),
-    "DB_NAME": (db_name, db_name != "agri_data" and db_name is not None),
-    "DB_PORT": (db_port, db_port != "3306" and db_port is not None),
-    "DB_PASSWORD": ("***" if db_password else "NOT SET", db_password != "" and db_password is not None)
-}
+# Display all variables
+sl.sidebar.write(f"DB_HOST: {db_host}")
+sl.sidebar.write(f"DB_USER: {db_user}")
+sl.sidebar.write(f"DB_NAME: {db_name}")
+sl.sidebar.write(f"DB_PORT: {db_port}")
+sl.sidebar.write(f"DB_PASSWORD: {'***' if db_password else 'NOT SET'}")
 
-for var, (value, is_set) in env_vars_status.items():
-    status = "✅" if is_set else "❌"
-    sl.sidebar.write(f"{status} {var}: {value}")
+# Check if running on Render (PORT is set by Render automatically)
+is_render = os.getenv("PORT") is not None
 
-# Warning if the environment variables are not configured correctly
-if not all(is_set for var, (_, is_set) in env_vars_status.items()):
-    sl.sidebar.error("⚠️ **Environment variables not configured**")
-    sl.sidebar.info("""
-    **To fix:**
-    1. Go to Render Dashboard
-    2. Select this service
-    3. Go to Environment section
-    4. Add all DB_* variables
-    5. Manual Deploy > Deploy latest commit
+if is_render:
+    # On Render, check if we have all required vars with non-default values
+    # (except PORT which Render sets automatically)
+    has_custom_config = (
+        db_host != "localhost" and 
+        db_user != "root" and 
+        db_name != "agri_data" and 
+        db_password != ""
+    )
     
-    See `App/DEPLOYMENT.md` for details.
-    """)
+    if not has_custom_config:
+        sl.sidebar.warning("⚠️ **Environment variables may not be configured on Render**")
+        sl.sidebar.info("""
+        If data is not loading:
+        1. Go to Render Dashboard
+        2. Select this service  
+        3. Go to Environment section
+        4. Add DB_HOST, DB_USER, DB_NAME, DB_PASSWORD, DB_PORT
+        5. Manual Deploy > Deploy latest commit
+        
+        See `App/DEPLOYMENT.md` for details.
+        """)
+    else:
+        sl.sidebar.success("✅ Running on Render - environment variables configured")
+else:
+    sl.sidebar.success("✅ Running locally - using .env file")
     
 sl.set_page_config(page_title="Analytics Olive Oil and Olive Production Company", layout="wide")
 sl.title("Analytics Olive Oil and Olive Production Company Dashboard")
