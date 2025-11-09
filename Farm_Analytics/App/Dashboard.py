@@ -51,7 +51,7 @@ if is_render:
         4. Add DB_HOST, DB_USER, DB_NAME, DB_PASSWORD, DB_PORT
         5. Manual Deploy > Deploy latest commit
         
-        See `App/DEPLOYMENT.md` for details.
+        **Important:** After adding variables, you MUST restart the service!
         """)
     else:
         sl.sidebar.success("✅ Running on Render - environment variables configured")

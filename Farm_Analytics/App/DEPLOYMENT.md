@@ -29,6 +29,11 @@ Click on **"Add Environment Variable"** and add them one by one:
 | `DB_PASSWORD` | Database password | `your_password` |
 | `DB_NAME` | Database name | `agri_data` |
 
+**⚠️ IMPORTANT:** 
+- After adding each variable, make sure it appears in the list below
+- Verify the values are correct (especially `DB_HOST` - it should NOT be `localhost`)
+- Click **"Save Changes"** after adding all variables
+
 ### Step 3: Restart the Service
 
 1. After adding all variables, go back to the service main page
