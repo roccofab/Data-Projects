@@ -10,9 +10,9 @@
 
 - **Data cleaning and validation.**
 
-- **Exploratory and Advanced Analysis:** trends, economic/agronomic KPIs, weather-yield correlations, and inter-annual comparisons.
+- **Exploratory and Advanced Analysis:** trends, economic/agronomic KPIs, weather-yield correlations, inter-annual comparisons...
 
-- **Cost and Performance Metrics:** cost per ton/kg, cost per liter of oil, profit/ha, annual growth.
+- **Cost and Performance Metrics:** cost per ton/kg, cost per liter of oil, profit/ha, annual growth...
 
 - **Data Visualization by using static charts**
 
@@ -22,10 +22,76 @@
 
 - **Modular architecture:** Clear separation between data acquisition, simulation, EDA, and web applications.
 
+## 📊 Web Dashboard:
+https://farm-analyics-dashboard.onrender.com
+
 ## 🧰 Tools Used:
 - Python, Pandas, Numpy, Matplotlib, Seaborn, Streamlit, Altair, pytest,unittest, MagicMock.
 
 - **Other Technologies:** MySQL, SQLAlchemy, HTTP/API(requests, Open-Meteo API).
+
+## Download and Local Usage:
+### Requirements:
+- Python 3.x or later
+- MySQL or SQLite
+- Internet Connection for Open‑Meteo API
+- IDE(optional)
+- Windows/Linux/macOS
+
+### SetUp Enviroment:
+
+- Credentials Configuration (.env):
+
+    - Create an .env file in the project root with the variables read from src/data_acquisition/DBConnection.py:
+
+            DB_HOST=localhost
+            DB_PORT=3306
+            DB_USER=your_username
+            DB_PASSWORD=your_password
+            DB_NAME=agri_data
+
+- Install Dependencies: 
+
+      pip install -r dependencies.txt 
+
+- Populate Tables:
+
+    **1. OPTION 1: Import (tables+ data) the already populated database from [Dump20251113.sql](db/Dump20251113.sql):** 
+
+    - Ensure you have MySQL or MariaDB installed and the permissions for database creation.
+
+    - Open your prompt and type:
+
+            mysql -u your_username -p < db/Dump20251113.sql
+
+    - Alternatively import the Dump file by using MySQL workbench(Data Import).
+
+    **2. OPTION 2: Create your new local Database and populate the tables with new data:**
+    
+    - Create a new empy database **agri_data** from MySql workbench, alternatively you  
+         can use MySQL shell and type:
+
+              CREATE DATABASE agri_data; 
+
+        **IMPORTANT:** The database name must match the DB_NAME value in the .env file
+
+        - Running the following scripts from the root folder:
+            ```
+            python -c "from src.data_acquisition.save_production_data import generate_production_data_table; generate_production_data_table()"
+            python -c "from src.data_acquisition.save_consumption_cost_data import generate_consumption_table; generate_consumption_table()"
+            python src/data_acquisition/save_weather_data.py
+            ```
+
+          Alternatively run the full flow by typing:
+            ```
+            python Main.py
+            ```
+- You can launch the Dashboard locally:
+    - Open your prompt and go to the root folder.
+
+    - Type:
+
+             streamlit run App/Dashboard.py
 
 ## 📦 Dataset:
 1. **weather_data:**
@@ -116,45 +182,3 @@
 
 - **Annual weather trend**: Temperatures have increased slightly in recent years; precipitation and wind have seen mixed results.
 
-## Download and Usage:
-### Requirements:
-- Python 3.x or later
-- MySQL or SQLite
-- Internet Connection for Open‑Meteo API
-- IDE(optional)
-- Windows/Linux/macOS
-
-### Download and SetUp Enviroment:
-
-- Log-In to your **MySQL Shell** account and create the database:
-
-       CREATE DATABASE agri_sud;
-
-- Credentials Configuration (.env):
-
-    - Create an .env file in the project root with the variables read from src/data_acquisition/DBConnection.py:
-
-            DB_HOST=localhost
-            DB_PORT=3306
-            DB_USER=your_username
-            DB_PASSWORD=your_password
-            DB_NAME=agri_data
-
-- Install Dependencies: 
-
-      pip install -r dependencies.txt 
-
-- Populate Tables:
-
-        python -c "from src.data_acquisition.save_production_data import generate_production_data_table; generate_production_data_table()"
-        python -c "from src.data_acquisition.save_consumption_cost_data import generate_consumption_table; generate_consumption_table()"
-        python src/data_acquisition/save_weather_data.py   # quando vuoi aggiungere il meteo
-
-    **Alternatively, simply run the Main.py file**
-
-- You can launch the Dashboard locally:
-    - Open your prompt and go to the root folder.
-
-    - Type:
-
-             streamlit run App/Dashboard.py
